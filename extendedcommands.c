@@ -118,7 +118,7 @@ void show_install_update_menu()
                 break;
             case ITEM_PRE_THEME:
             {
-                if (confirm_selection("Confirm wiping Cache and Dalvik?", "Yes - Wipe")) {
+                if (confirm_selection("Confirm wiping Cache and Dalvik?", "Yes - Wipe"))
                    
                 if (0 != ensure_path_mounted("/data"))
                     break;
@@ -134,10 +134,9 @@ void show_install_update_menu()
                 ui_print("Dalvik and Cache wiped.\n");
                 break;
             }
-			}
             case ITEM_PRE_ROM:
             {
-                if (confirm_selection("Confirm wiping Data, Cache and Dalvik?", "Yes - Wipe")) {
+                if (confirm_selection("Confirm wiping Data, Cache and Dalvik?", "Yes - Wipe"))
                    
                 if (0 != ensure_path_mounted("/data"))
                     break;
@@ -153,7 +152,6 @@ void show_install_update_menu()
                 ensure_path_unmounted("/data");
                 ui_print("Data,Dalvik and Cache wiped.\n");
                 break;
-            }
             }
             case ITEM_CHOOSE_ZIP:
                 show_choose_zip_menu("/sdcard/");
