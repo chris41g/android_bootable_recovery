@@ -37,59 +37,50 @@ int device_recovery_start() {
     return 0;
 }
 
-int device_toggle_display(volatile char* key_pressed, int key_code) {
-    int alt = key_pressed[KEY_LEFTALT] || key_pressed[KEY_RIGHTALT];
-    if (alt && key_code == KEY_L)
-        return 1;
-    // allow toggling of the display if the correct key is pressed, and the display toggle is allowed or the display is currently off
-    if (ui_get_showing_back_button()) {
-        return 0;
-        //return get_allow_toggle_display() && (key_code == KEY_HOME || key_code == KEY_MENU || key_code == KEY_END);
-    }
-    return get_allow_toggle_display() && (key_code == KEY_HOME || key_code == KEY_END);
+int device_toggle_display(volatile char* key_pressed, int key_code) { 
+    return key_code == 23; // keypad d key
 }
 
 int device_reboot_now(volatile char* key_pressed, int key_code) {
-    return 0;
+    // Reboot if the power key is pressed five times in a row, with
+    // no other keys in between.
+    static int presses = 0;
+    if (key_code == 116) { // power button
+        ++presses;
+        return presses == 5;
+    } else {
+        presses = 0;
+        return 0;
+    }
 }
 
 int device_handle_key(int key_code, int visible) {
     if (visible) {
+         if (visible) {
         switch (key_code) {
-            case KEY_DOWN:
-             return HIGHLIGHT_DOWN;
+            case 51:  // side volume up button
+            case 48:  // keypad left key
+            case 39:  // keypad up key
+                return HIGHLIGHT_UP;
 
-            case KEY_VOLUMEDOWN:
-             return HIGHLIGHT_DOWN;
+            case 52:  // side volume down button
+            case 50:  // keypad right key
+            case 49:  // keypad down key
+                return HIGHLIGHT_DOWN;
 
-            case KEY_MENU:
-             return SELECT_ITEM;
-            case KEY_LEFTSHIFT:
-            case KEY_UP:
-             return HIGHLIGHT_UP;
-
-            case KEY_VOLUMEUP:
-             return HIGHLIGHT_UP;
-
-            case KEY_HOME:
-            case KEY_POWER:
-             return GO_BACK;
-                
-            case KEY_LEFTBRACE:
-            case KEY_ENTER:
-             return SELECT_ITEM;
-
-            case BTN_MOUSE:
-            case KEY_CENTER:
-            case KEY_CAMERA:
-             return SELECT_ITEM; 
-
-            case KEY_F21:
-            case KEY_SEND:
-            case KEY_BACKSPACE:
-            case KEY_BACK:
-                return GO_BACK;
+            case 102: // menu cap key
+            case 53:  // keypad home key 
+            case 46:  // side camera button full press 
+            case 40:  // keypad enter/return key
+                return SELECT_ITEM;
+            
+            case 158: // back cap key
+            case 116: // side power button
+            case 57:  // keypad back key 
+            case 30:  // keypad delete key
+                    return GO_BACK;
         }
+    }
     }
 
     return NO_ACTION;

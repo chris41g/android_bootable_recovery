@@ -647,6 +647,7 @@ sdcard_directory(const char* path) {
 
 static void
 wipe_data(int confirm) {
+	struct stat info;
     if (confirm) {
         static char** title_headers = NULL;
 
@@ -661,7 +662,7 @@ wipe_data(int confirm) {
 		char* items[] = { "No",
 						confirm, //" Yes -- wipe partition",   // [1]
 						NULL };
-		int chosen_item = get_menu_selection(confirm_headers, items, 0, 0);
+		int chosen_item = get_menu_selection(title_headers, items, 1, 0);
 		return chosen_item == 1;
 	}
 	else {
@@ -681,7 +682,7 @@ wipe_data(int confirm) {
 		return chosen_item == 7;
 	}
 	}
-    }
+    
 
     ui_print("\n-- Wiping data...\n");
     device_wipe_data();
