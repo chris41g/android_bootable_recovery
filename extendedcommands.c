@@ -80,20 +80,24 @@ int install_zip(const char* packagefilepath)
 }
 
 char* INSTALL_MENU_ITEMS[] = {  "choose zip from sdcard",
-                                "apply /sdcard/update.zip",
+                                "pre-theme install wipe",
+                                "pre-rom install wipe",
                                 "toggle signature verification",
                                 "toggle script asserts",
+#ifdef BOARD_HAS_INTERNAL_SD
                                 "choose zip from internal sdcard",
+#endif
                                 NULL };
 #define ITEM_CHOOSE_ZIP       0
-#define ITEM_APPLY_SDCARD     1
-#define ITEM_SIG_CHECK        2
-#define ITEM_ASSERTS          3
-#define ITEM_CHOOSE_ZIP_INT   4
+#define ITEM_PRE_THEME        1
+#define ITEM_PRE_ROM          2
+#define ITEM_SIG_CHECK        3
+#define ITEM_ASSERTS          4
+#define ITEM_CHOOSE_ZIP_INT   5
 
 void show_install_update_menu()
 {
-    static char* headers[] = {  "Apply update from .zip file on SD card",
+    static char* headers[] = {  "Install a zip file on SD card",
                                 "",
                                 NULL
     };
@@ -112,10 +116,41 @@ void show_install_update_menu()
             case ITEM_SIG_CHECK:
                 toggle_signature_check();
                 break;
-            case ITEM_APPLY_SDCARD:
+            case ITEM_PRE_THEME:
             {
-                if (confirm_selection("Confirm install?", "Yes - Install /sdcard/update.zip"))
-                    install_zip(SDCARD_UPDATE_FILE);
+                if (confirm_selection("Confirm wiping Cache and Dalvik?", "Yes - Wipe"))
+                   
+                if (0 != ensure_path_mounted("/data"))
+                    break;
+                ensure_path_mounted("/sd-ext");
+                ensure_path_mounted("/cache");
+                ui_print("Erradicating Dalvik...\n");
+                __system("rm -r /data/dalvik-cache");
+                __system("rm -r /cache/dalvik-cache");
+                __system("rm -r /sd-ext/dalvik-cache");
+                ui_print("Crushing Cache...\n");
+                __system("rm -r /cache/*");
+                ensure_path_unmounted("/data");
+                ui_print("Dalvik and Cache wiped.\n");
+                break;
+            }
+            case ITEM_PRE_ROM:
+            {
+                if (confirm_selection("Confirm wiping Data, Cache and Dalvik?", "Yes - Wipe"))
+                   
+                if (0 != ensure_path_mounted("/data"))
+                    break;
+                ensure_path_mounted("/sd-ext");
+                ensure_path_mounted("/cache");
+                ui_print("Destroying Data...\n");
+                __system("rm -r /data/*");
+                ui_print("Erradicating Dalvik...\n");
+                __system("rm -r /data/dalvik-cache");
+                __system("rm -r /sd-ext/dalvik-cache");
+                ui_print("Crushing Cache...\n");
+                __system("rm -r /cache/*");
+                ensure_path_unmounted("/data");
+                ui_print("Data,Dalvik and Cache wiped.\n");
                 break;
             }
             case ITEM_CHOOSE_ZIP:
@@ -819,9 +854,11 @@ void show_nandroid_menu()
     static char* list[] = { "backup",
                             "restore",
                             "advanced restore",
+#ifdef BOARD_HAS_INTERNAL_SD
                             "backup to internal sdcard",
                             "restore from internal sdcard",
                             "advanced restore from internal sdcard",
+#endif
                             NULL
     };
 
@@ -886,8 +923,8 @@ void wipe_battery_stats()
 {
     ensure_path_mounted("/data");
     remove("/data/system/batterystats.bin");
+    ui_print("Let's forget about that old battery life... \n");
     ensure_path_unmounted("/data");
-    ui_print("Battery Stats wiped.\n");
 }
 
 void show_advanced_menu()

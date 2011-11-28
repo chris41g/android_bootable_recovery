@@ -170,10 +170,9 @@ static void draw_text_line(int row, const char* t) {
   }
 }
 
-//#define MENU_TEXT_COLOR 255, 160, 49, 255
-#define MENU_TEXT_COLOR 0, 191, 255, 255
-#define NORMAL_TEXT_COLOR 200, 200, 200, 255
-#define HEADER_TEXT_COLOR NORMAL_TEXT_COLOR
+#define MENU_TEXT_COLOR 0, 114, 255, 255
+#define NORMAL_TEXT_COLOR 25, 25, 112, 255
+#define HEADER_TEXT_COLOR 185, 20, 20, 255
 
 // Redraw everything on the screen.  Does not flip pages.
 // Should only be called with gUpdateMutex locked.

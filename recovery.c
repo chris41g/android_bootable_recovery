@@ -657,24 +657,30 @@ wipe_data(int confirm) {
                                 NULL };
             title_headers = prepend_title((const char**)headers);
         }
-
-        char* items[] = { " No",
-                          " No",
-                          " No",
-                          " No",
-                          " No",
-                          " No",
-                          " No",
-                          " Yes -- delete all user data",   // [7]
-                          " No",
-                          " No",
-                          " No",
-                          NULL };
-
-        int chosen_item = get_menu_selection(title_headers, items, 1, 0);
-        if (chosen_item != 7) {
-            return;
-        }
+	if (0 == stat("/sdcard/clockworkmod/.one_confirm", &info)) {
+		char* items[] = { "No",
+						confirm, //" Yes -- wipe partition",   // [1]
+						NULL };
+		int chosen_item = get_menu_selection(confirm_headers, items, 0, 0);
+		return chosen_item == 1;
+	}
+	else {
+		char* items[] = { "No",
+						"No",
+						"No",
+						"No",
+						"No",
+						"No",
+						"No",
+						"Yes -- delete all user data",   // [7]
+						"No",
+						"No",
+						"No",
+						NULL };
+		int chosen_item = get_menu_selection(title_headers, items, 1, 0);
+		return chosen_item == 7;
+	}
+	}
     }
 
     ui_print("\n-- Wiping data...\n");
@@ -726,7 +732,7 @@ prompt_and_wait() {
                 }
                 break;
 
-            case ITEM_APPLY_SDCARD:
+           /* case ITEM_APPLY_SDCARD:
                 if (confirm_selection("Confirm install?", "Yes - Install /sdcard/update.zip"))
                 {
                     ui_print("\n-- Install from sdcard...\n");
@@ -740,7 +746,7 @@ prompt_and_wait() {
                         ui_print("\nInstall from sdcard complete.\n");
                     }
                 }
-                break;
+                break; */
             case ITEM_INSTALL_ZIP:
                 show_install_update_menu();
                 break;
@@ -752,6 +758,9 @@ prompt_and_wait() {
                 break;
             case ITEM_ADVANCED:
                 show_advanced_menu();
+                break;
+            case ITEM_DOWNLOAD:
+                __system("/sbin/reboot download");
                 break;
             case ITEM_POWEROFF:
                 poweroff=1;
