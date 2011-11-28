@@ -84,7 +84,7 @@ char* INSTALL_MENU_ITEMS[] = {  "choose zip from sdcard",
                                 "pre-rom install wipe",
                                 "toggle signature verification",
                                 "toggle script asserts",
-#ifdef BOARD_HAS_INTERNAL_SD
+#ifdef BOARD_HAS_SDCARD_INTERNAL
                                 "choose zip from internal sdcard",
 #endif
                                 NULL };
@@ -854,7 +854,7 @@ void show_nandroid_menu()
     static char* list[] = { "backup",
                             "restore",
                             "advanced restore",
-#ifdef BOARD_HAS_INTERNAL_SD
+#ifdef BOARD_HAS_SDCARD_INTERNAL
                             "backup to internal sdcard",
                             "restore from internal sdcard",
                             "advanced restore from internal sdcard",
