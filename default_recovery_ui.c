@@ -22,11 +22,8 @@
 
 char* MENU_HEADERS[] = { NULL };
 
-char* MENU_ITEMS[] = { "reboot system now",
+char* MENU_ITEMS[] = { "reboot menu",
                        "power off",
-#ifdef DEVICE_IS_SAMSUNG
-                       "download mode",
-#endif                       
                        "wipe data/factory reset",
                        "wipe cache partition",
                        "install zip from sdcard",

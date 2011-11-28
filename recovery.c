@@ -524,8 +524,7 @@ static int compare_string(const void* a, const void* b) {
     return strcmp(*(const char**)a, *(const char**)b);
 }
 
-static int
-sdcard_directory(const char* path) {
+static int sdcard_directory(const char* path) {
     ensure_path_mounted(SDCARD_ROOT);
 
     const char* MENU_HEADERS[] = { "Choose a package to install:",
@@ -715,9 +714,9 @@ prompt_and_wait() {
 
         switch (chosen_item) {
             case ITEM_REBOOT:
-                poweroff=0;
-                return;
-
+               show_reboot_menu();
+               break;
+               
             case ITEM_WIPE_DATA:
                 wipe_data(ui_text_visible());
                 if (!ui_text_visible()) return;
@@ -733,21 +732,6 @@ prompt_and_wait() {
                 }
                 break;
 
-           /* case ITEM_APPLY_SDCARD:
-                if (confirm_selection("Confirm install?", "Yes - Install /sdcard/update.zip"))
-                {
-                    ui_print("\n-- Install from sdcard...\n");
-                    int status = install_package(SDCARD_PACKAGE_FILE);
-                    if (status != INSTALL_SUCCESS) {
-                        ui_set_background(BACKGROUND_ICON_ERROR);
-                        ui_print("Installation aborted.\n");
-                    } else if (!ui_text_visible()) {
-                        return;  // reboot if logs aren't visible
-                    } else {
-                        ui_print("\nInstall from sdcard complete.\n");
-                    }
-                }
-                break; */
             case ITEM_INSTALL_ZIP:
                 show_install_update_menu();
                 break;
@@ -759,9 +743,6 @@ prompt_and_wait() {
                 break;
             case ITEM_ADVANCED:
                 show_advanced_menu();
-                break;
-            case ITEM_DOWNLOAD:
-                __system("/sbin/reboot download");
                 break;
             case ITEM_POWEROFF:
                 poweroff=1;
