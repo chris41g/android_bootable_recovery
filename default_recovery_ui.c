@@ -40,7 +40,7 @@ int device_recovery_start() {
 }
 
 int device_toggle_display(volatile char* key_pressed, int key_code) { 
-    return key_code == 23; // keypad d key
+    return key_code == 217; // keypad d key
 }
 
 int device_reboot_now(volatile char* key_pressed, int key_code) {
@@ -60,26 +60,17 @@ int device_handle_key(int key_code, int visible) {
     if (visible) {
          if (visible) {
         switch (key_code) {
-            case 51:  // side volume up button
-            case 48:  // keypad left key
-            case 39:  // keypad up key
+            case 115:  // side volume up button
                 return HIGHLIGHT_UP;
 
-            case 52:  // side volume down button
-            case 50:  // keypad right key
-            case 49:  // keypad down key
+            case 114:  // side volume down button
                 return HIGHLIGHT_DOWN;
 
-            case 102: // menu cap key
-            case 53:  // keypad home key 
-            case 46:  // side camera button full press 
-            case 40:  // keypad enter/return key
-                return SELECT_ITEM;
+            case 139: // menu cap key
+            case 116: // side power button
+                    return SELECT_ITEM;
             
             case 158: // back cap key
-            case 116: // side power button
-            case 57:  // keypad back key 
-            case 30:  // keypad delete key
                     return GO_BACK;
         }
     }
