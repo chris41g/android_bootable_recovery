@@ -1127,8 +1127,8 @@ void show_reboot_menu()
             }
             case 1:
             {
-        poweroff=0;
-                return;
+				reboot_wrapper(NULL);
+                break;
             }
             case 2:
             {
